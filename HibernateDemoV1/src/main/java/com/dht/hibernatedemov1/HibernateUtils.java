@@ -5,9 +5,10 @@
 package com.dht.hibernatedemov1;
 
 import com.dht.pojo.Category;
-import com.dht.pojo.Comment;
+import com.dht.pojo.OrderDetail;
 import com.dht.pojo.ProdTag;
 import com.dht.pojo.Product;
+import com.dht.pojo.SaleOrder;
 import com.dht.pojo.Tag;
 import com.dht.pojo.User;
 import java.util.Properties;
@@ -41,7 +42,8 @@ public class HibernateUtils {
         conf.addAnnotatedClass(Tag.class);
         conf.addAnnotatedClass(User.class);
         conf.addAnnotatedClass(ProdTag.class);
-        conf.addAnnotatedClass(Comment.class);
+        conf.addAnnotatedClass(SaleOrder.class);
+        conf.addAnnotatedClass(OrderDetail.class);
         
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(conf.getProperties()).build();
