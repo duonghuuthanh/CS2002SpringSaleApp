@@ -65,7 +65,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             String cateId = params.get("cateId");
             if (cateId != null && !cateId.isEmpty()) {
-                predicates.add(b.equal(root.get("category"), Integer.parseInt(cateId)));
+                predicates.add(b.equal(root.get("categoryId"), Integer.parseInt(cateId)));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -86,5 +86,13 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         return query.getResultList();
 
+    }
+
+    @Override
+    public int countProduct() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) From Product");
+        
+        return Integer.parseInt(q.getSingleResult().toString());
     }
 }

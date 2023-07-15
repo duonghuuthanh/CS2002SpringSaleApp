@@ -4,15 +4,13 @@
  */
 package com.dht.service;
 
-import com.dht.pojo.Product;
+import com.dht.pojo.Category;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author admin
  */
-public interface ProductService {
-    List<Product> getProducts(Map<String, String> params);
-    int countProduct();
+public interface CategoryService {
+    List<Category> getCates();
 }
