@@ -5,12 +5,16 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="se" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <c:url value="/" var="action" />
 <section class="container">
     <h1 class="text-center text-success mt-1">DANH SÁCH SẢN PHẨM</h1>
+    
+    <se:authorize access="hasRole('ROLE_ADMIN')">
     <a href="<c:url value="/products" />" class="btn btn-info mt-1">Thêm sản phẩm</a>
+    </se:authorize>
 
     <c:if test="${pages > 1}">
         <ul class="pagination mt-1">
@@ -50,9 +54,11 @@
                     <td>${p.name}</td>
                     <td>${p.price} VNĐ</td>
                     <td>
+                        <se:authorize access="hasRole('ROLE_ADMIN')">
                         <c:url value="/products/${p.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
                         <button class="btn btn-danger" onclick="deleleProduct('${api}')">Xóa</button>
+                        </se:authorize>
                     </td>
                 </tr>
             </c:forEach>

@@ -5,14 +5,17 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="se" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <c:url value="/" var="action" />
 <section class="container">
     <h1 class="text-center text-info mt-1">DANH SÁCH SẢN PHẨM</h1>
+    <se:authorize access="hasRole('ROLE_ADMIN')">
     <div>
         <a href="<c:url value="/products" />" class="btn btn-info">Thêm sản phẩm</a>
     </div>
+    </se:authorize>
     <c:if test="${counter > 1}">
         <ul class="pagination mt-1">
             <li class="page-item"><a class="page-link" href="${action}">Tất cả</a></li>
@@ -51,13 +54,16 @@
                     <td>${p.price} VND</td>
                     <td>${p.categoryId.name}</td>
                     <td>
-                        <c:url value="/products/${p.id}" var="api" />
-                        <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteProduct('${api}')">Xóa</button>
+                        <se:authorize access="hasRole('ROLE_ADMIN')">
+                            <c:url value="/products/${p.id}" var="api" />
+                            <a href="${api}" class="btn btn-info">Cập nhật</a>
+                            <button class="btn btn-danger" onclick="deleteProduct('${api}')">Xóa</button>
+                        </se:authorize>
                     </td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 </section>
+    
 <script src="<c:url value="/js/main.js" />"></script>
