@@ -4,20 +4,31 @@ import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from "react-bootstrap";
+import Login from "./components/Login";
+import { createContext, useReducer } from "react";
+import MyUserReducer from "./reducers/MyUserReducer";
+import cookie from "react-cookies";
+
+export const MyUserContext = createContext();
 
 const App = () => {
+  const [user, dispatch] = useReducer(MyUserReducer, cookie.load("user") || null);
+
   return (
-    <BrowserRouter>
-      <Header />
+    <MyUserContext.Provider value={[user, dispatch]}>
+      <BrowserRouter>
+        <Header />
 
-     <Container>
-      <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-     </Container>
+      <Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+      </Container>
 
-      <Footer /> 
-    </BrowserRouter>
+        <Footer /> 
+      </BrowserRouter>
+    </MyUserContext.Provider>
   )
 }
 

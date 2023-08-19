@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { MyUserContext } from "../App";
 import Apis, { endpoints } from "../configs/Apis";
 import MySpinner from "./MySpinner";
 
 const Header = () => {
+    const [user, dispatch] = useContext(MyUserContext);
     const [categories, setCategories] = useState(null);
     const [kw, setKw] = useState("");
     const nav = useNavigate();
@@ -27,6 +29,12 @@ const Header = () => {
         nav(`/?kw=${kw}`)
     }
 
+    const logout = () => {
+        dispatch({
+            "type": "logout"
+        });
+    }
+
     if (categories === null)
         return <MySpinner />; 
 
@@ -37,7 +45,7 @@ const Header = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                <Nav.Link href="#home">Trang chủ</Nav.Link>
+                <Link className="nav-link" to="/">Trang chủ</Link>
                 
                 <NavDropdown title="Danh mục sản phẩm" id="basic-nav-dropdown">
                     {categories.map(c => {
@@ -45,7 +53,10 @@ const Header = () => {
                         return <Link className="dropdown-item" to={h} key={c.id}>{c.name}</Link>;
                     })}
                 </NavDropdown>
-                <Nav.Link href="#link">Đăng nhập</Nav.Link>
+                {user === null?<Link className="nav-link" to="/login">Đăng nhập</Link>:<>
+                    <Link className="nav-link" to="/">Chào {user.username}!</Link>
+                    <Button onClick={logout} variant="secondary">Đăng xuất</Button>
+                </>}
                 </Nav>
             </Navbar.Collapse>
             <Form inline onSubmit={search}>
