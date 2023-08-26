@@ -1,5 +1,7 @@
+import { Alert } from "react-bootstrap";
+
 const Footer = () => {
-    return <h1>MY FOOTER</h1>
+    return <Alert variant="info">Dương Hữu Thành &copy; 2023</Alert>
 }
 
 export default Footer;

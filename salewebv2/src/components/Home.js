@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Row } from "react-bootstrap";
+import cookie from "react-cookies";
 import { useSearchParams } from "react-router-dom";
+import { MyCartContext } from "../App";
 import Apis, { endpoints } from "../configs/Apis";
 import MySpinner from "../layout/MySpinner";
 
 const Home = () => {
+    const [cartCounter, cartDispatch] = useContext(MyCartContext);
     const [products, setProducts] = useState(null);
     const [q] = useSearchParams();
 
@@ -31,7 +34,36 @@ const Home = () => {
         }
 
         loadProducts();
-    }, [q])
+    }, [q]);
+
+    const order = (p) => {
+        // Lưu đơn vào cookies
+        let cart = cookie.load("cart") || null;
+        if (cart === null)
+            cart = {};
+        
+        if (p.id in cart) {
+            // sản phẩm đã có trong giỏ
+            cart[p.id]["quantity"] += 1;
+        } else {
+            // sản phẩm chưa có trong giỏ
+            cart[p.id] = {
+                "id": p.id,
+                "name": p.name,
+                "unitPrice": p.price,
+                "quantity": 1
+            };
+        }
+
+        cookie.save("token", cart);
+        console.info(cart);
+
+        // Cập nhật giao diện
+        cartDispatch({
+            "type": "inc",
+            "payload": 1
+        });
+    }
 
     if (products === null)
         return <MySpinner />;
@@ -49,7 +81,7 @@ const Home = () => {
                                 <Card.Title>{p.name}</Card.Title>
                                 <Card.Text>{p.price} VNĐ</Card.Text>
                                 <Button variant="primary">Xem chi tiết</Button>
-                                <Button variant="danger">Đặt hàng</Button>
+                                <Button variant="danger" onClick={() => order(p)}>Đặt hàng</Button>
                             </Card.Body>
                         </Card>
                     </Col>

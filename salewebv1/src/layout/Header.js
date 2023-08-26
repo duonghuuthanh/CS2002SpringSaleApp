@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
+import { Badge, Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { MyUserContext } from "../App";
+import { MyCartContext, MyUserContext } from "../App";
 import Apis, { endpoints } from "../configs/Apis";
 import MySpinner from "./MySpinner";
 
 const Header = () => {
     const [user, dispatch] = useContext(MyUserContext);
+    const [cartCounter, ] = useContext(MyCartContext);
     const [categories, setCategories] = useState(null)
     const [kw, setKw] = useState("")
     const nav = useNavigate();
@@ -54,10 +55,16 @@ const Header = () => {
                     })}
                     
                 </NavDropdown>
-                {user === null?<Link className="nav-link" to="/login">Đăng nhập</Link>:<>
+                {user === null?<>
+                    <Link className="nav-link" to="/login">Đăng nhập</Link>
+                    <Link className="nav-link" to="/register">Đăng ký</Link>
+                </>:<>
                     <Link className="nav-link" to="/">Chào {user.username}!</Link>
                     <Button onClick={logout} variant="secondary">Đăng xuất</Button>
                 </>}
+
+                <Link className="nav-link" to="/cart">&#128722; <Badge bg="danger">{cartCounter}</Badge></Link>
+                
                 </Nav>
             </Navbar.Collapse>
             <Form onSubmit={search} inline>
