@@ -1,6 +1,6 @@
 import cookie from "react-cookies";
 
-const MyUserReducer = (currentState, action) => {
+const MyUserReducer = (currentState=null, action) => {
     switch (action.type) {
         case "login":
             return action.payload;

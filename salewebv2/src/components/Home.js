@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Row } from "react-bootstrap";
 import cookie from "react-cookies";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { MyCartContext } from "../App";
 import Apis, { endpoints } from "../configs/Apis";
 import MySpinner from "../layout/MySpinner";
@@ -55,7 +55,7 @@ const Home = () => {
             };
         }
 
-        cookie.save("token", cart);
+        cookie.save("cart", cart);
         console.info(cart);
 
         // Cập nhật giao diện
@@ -74,14 +74,15 @@ const Home = () => {
     return (
         <Row>
             {products.map(p => {
+                let url =  `/products/${p.id}`;
                 return <Col xs={12} md={3} className="mt-2">
                         <Card>
                             <Card.Img variant="top" src={p.image} />
                             <Card.Body>
                                 <Card.Title>{p.name}</Card.Title>
                                 <Card.Text>{p.price} VNĐ</Card.Text>
-                                <Button variant="primary">Xem chi tiết</Button>
-                                <Button variant="danger" onClick={() => order(p)}>Đặt hàng</Button>
+                                <Link className="m-1 btn btn-info" to={url} variant="primary">Xem chi tiết</Link>
+                                <Button className="m-1" variant="danger" onClick={() => order(p)}>Đặt hàng</Button>
                             </Card.Body>
                         </Card>
                     </Col>
